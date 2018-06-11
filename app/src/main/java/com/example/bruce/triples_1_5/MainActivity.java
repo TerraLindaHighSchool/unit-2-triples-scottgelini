@@ -40,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
         mSelectedButton = (String) radioButton.getText();
         if(mSelectedButton.equals("Newbie")) mLevel = 1;
         if(mSelectedButton.equals("Beginner")) mLevel = 2;
+        if(mSelectedButton.equals("Seasoned")) mLevel = 3;
+        if(mSelectedButton.equals("Experienced")) mLevel = 4;
+        if(mSelectedButton.equals("Expert")) mLevel = 5;
     }
 
     private void showToast(){

@@ -7,11 +7,12 @@ public class GameActivity {
     private ArrayList<Card> mCardOnBoard;
     private ArrayList<Integer> mSelectedCards;
     private long mStartTime;
-    private int mNumOfCardsInDeck, mScore, mTriplesRemaining;
+    private int mNumOfCardsInDeck, mScore, mTriplesRemaining, mLevel;
 
     public GameActivity(int numOfCardsInDeck, int level){
         mNumOfCardsInDeck = numOfCardsInDeck;
         mTriplesRemaining = numOfCardsInDeck / 3;
+        mLevel = level;
         deck = new Deck(numOfCardsInDeck);
         mCardOnBoard = new ArrayList<Card>();
         mSelectedCards = new ArrayList<Integer>();
@@ -130,7 +131,7 @@ public class GameActivity {
 
     protected int updateScore() {
         long time = System.currentTimeMillis() - mStartTime;
-        long scoreThisRound = 1000 - time / 10;
+        long scoreThisRound = 1000 - time / (10 * mLevel);
         if(scoreThisRound < 100) mScore += 100;
         else mScore += (int) scoreThisRound;
         return mScore;

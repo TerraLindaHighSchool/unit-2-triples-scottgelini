@@ -26,8 +26,8 @@ public class UIController extends AppCompatActivity {
 
         // Get level from UI and assign number of cards on board and in deck
         int level = getIntent().getIntExtra("Level",1);
-        int numCardsInDeck = 81;  // default cards in deck
-        int numCardsOnBoard = 12; // default cards on board
+        int numCardsInDeck = 81;  //default cards in deck
+        int numCardsOnBoard = 12;  //default cards on board
         switch(level){
             case 1: numCardsOnBoard = 15;
                 numCardsInDeck = 27;
@@ -35,11 +35,14 @@ public class UIController extends AppCompatActivity {
             case 2: numCardsOnBoard = 12;
                 numCardsInDeck = 27;
                 break;
-            case 3: numCardsOnBoard = 18;
+            case 3: numCardsOnBoard = 9;
+                numCardsInDeck = 81;
                 break;
-            case 4: numCardsOnBoard = 15;;
+            case 4: numCardsOnBoard = 15;
+                numCardsInDeck = 81;
                 break;
             case 5: numCardsOnBoard = 12;
+                numCardsInDeck = 81;
                 break;
         }
 
