@@ -52,16 +52,16 @@ public class GameActivity extends AppCompatActivity {
         mTextScore = findViewById(R.id.TextView_Score);
         mTextHighScore = findViewById(R.id.TextView_High_Score);
         mButtonQuit = findViewById(R.id.Button_Quit);
-        setImageArray();
-        setAnimationsAndListener();
-        game = new GameModel(numCardsInDeck, level);
-        beginGame(numCardsOnBoard);
-        beginRound(numCardsOnBoard);
+        //setImageArray();
+        //setAnimationsAndListener();
+        //game = new GameModel(numCardsInDeck, level);
+        //beginGame(numCardsOnBoard);
+        //beginRound(numCardsOnBoard);
     }
-
+/*
     /*************************************************
      * Begin Game deals cards onto board
-     *************************************************/
+     ************************************************* /
     private void beginGame(int numCardsOnBoard){
         mButtonQuit.setText(R.string.quit);
         updateAndDeclareScores(true);
@@ -77,7 +77,7 @@ public class GameActivity extends AppCompatActivity {
 
     /*************************************************
      * Begin Round listens for user card selection
-     *************************************************/
+     ************************************************* /
     protected void beginRound(int numCardsOnBoard) {
         for (int imageIndex = 0; imageIndex < numCardsOnBoard; imageIndex++) {
             final int index = imageIndex;
@@ -113,7 +113,7 @@ public class GameActivity extends AppCompatActivity {
 
     /*************************************************
      * If triple, begins next round
-     *************************************************/
+     ************************************************* /
     private void endRound(){
         int index;
         if (game.isTriple(game.getSelectedCardIndex(0), game.getSelectedCardIndex(1),
@@ -143,7 +143,7 @@ public class GameActivity extends AppCompatActivity {
 
     /*************************************************
      * Misc Concrete Methods
-     *************************************************/
+     ************************************************* /
 
     protected void updateAndDeclareScores(boolean isBegin) {
         SharedPreferences prefs = getSharedPreferences("Triples", MODE_PRIVATE);
@@ -219,4 +219,5 @@ public class GameActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 
     }
+*/
 }
