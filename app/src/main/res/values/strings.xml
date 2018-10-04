@@ -4,4 +4,14 @@
     <string name="play_again">Play Again?</string>
     <string name="game_over">Game Over</string>
     <string name="play_not_possible">Play Is Not Possible</string>
+    <string name="card_descriptor">Card Image Holder</string>
+    <string name="score">Score: 0</string>
+    <string name="high_score">High Score: </string>
+    <string name="cards_remaining">Cards Remaining</string>
+    <string name="begin_game">Begin Game</string>
+    <string name="level1">Newbie</string>
+    <string name="level2">Beginner</string>
+    <string name="level3">Seasoned</string>
+    <string name="level4">Experienced</string>
+    <string name="level5">Expert</string>
 </resources>

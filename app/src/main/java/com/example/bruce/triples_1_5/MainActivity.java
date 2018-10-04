@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    protected void radioButtonClick(View view){
+    public void radioButtonClick(View view){
         RadioGroup rg = findViewById(R.id.radioGroup);
         int radioButtonID = rg.getCheckedRadioButtonId();
         RadioButton radioButton = findViewById(radioButtonID);

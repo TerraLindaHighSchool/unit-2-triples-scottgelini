@@ -1,7 +1,6 @@
 package com.example.bruce.triples_1_5;
 
 import android.content.Context;
-import android.content.res.Resources;
 
 import java.util.ArrayList;
 
@@ -40,9 +39,6 @@ public class GameModel {
         return mSelectedCards.get(index);
     }
 
-    protected int getTriplesRemaining(){
-        return mTriplesRemaining;
-    }
 
     protected void setStartTime(){
         mStartTime = System.currentTimeMillis();
