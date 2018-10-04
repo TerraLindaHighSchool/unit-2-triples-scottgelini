@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Triples_1_5</string>
+    <string name="quit">Quit</string>
+    <string name="play_again">Play Again?</string>
+    <string name="game_over">Game Over</string>
+    <string name="play_not_possible">Play Is Not Possible</string>
 </resources>

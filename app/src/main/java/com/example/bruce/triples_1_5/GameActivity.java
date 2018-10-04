@@ -1,139 +1,222 @@
 package com.example.bruce.triples_1_5;
 
-import java.util.ArrayList;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-public class GameActivity {
-    private Deck deck;
-    private ArrayList<Card> mCardOnBoard;
-    private ArrayList<Integer> mSelectedCards;
-    private long mStartTime;
-    private int mNumOfCardsInDeck, mScore, mTriplesRemaining, mLevel;
+public class GameActivity extends AppCompatActivity {
+    private final int MAX_IMAGES = 18;
+    private ImageView[] mImageArray = new ImageView[MAX_IMAGES];
+    private TextView mTextCardsRemaining, mTextScore, mTextHighScore;
+    private Button mButtonQuit;
+    private GameModel game;
+    private Animation wobble, slideDown;
 
-    public GameActivity(int numOfCardsInDeck, int level){
-        mNumOfCardsInDeck = numOfCardsInDeck;
-        mTriplesRemaining = numOfCardsInDeck / 3;
-        mLevel = level;
-        deck = new Deck(numOfCardsInDeck);
-        mCardOnBoard = new ArrayList<Card>();
-        mSelectedCards = new ArrayList<Integer>();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_game);
+
+        // Get level from UI and assign number of cards on board and in deck
+        int level = getIntent().getIntExtra("Level",1);
+        int numCardsOnBoard = 12;  //default cards on board
+        int numCardsInDeck = 81;  //default cards in deck
+        switch(level){
+            case 1: numCardsOnBoard = 15;
+                numCardsInDeck = 27;
+                break;
+            case 2: numCardsOnBoard = 12;
+                numCardsInDeck = 27;
+                break;
+            case 3: numCardsOnBoard = 18;
+                numCardsInDeck = 54;
+                break;
+            case 4: numCardsOnBoard = 15;
+                numCardsInDeck = 81;
+                break;
+            case 5: numCardsOnBoard = 12;
+                numCardsInDeck = 81;
+                break;
+        }
+
+        // set board features
+        mTextCardsRemaining = findViewById(R.id.TextView_CardsRemaining);
+        mTextScore = findViewById(R.id.TextView_Score);
+        mTextHighScore = findViewById(R.id.TextView_High_Score);
+        mButtonQuit = findViewById(R.id.Button_Quit);
+        setImageArray();
+        setAnimationsAndListener();
+        game = new GameModel(numCardsInDeck, level);
+        beginGame(numCardsOnBoard);
+        beginRound(numCardsOnBoard);
     }
 
     /*************************************************
-     * Getters and Setters
+     * Begin Game deals cards onto board
      *************************************************/
-
-    protected Card getCardOnBoard(int index){
-        return mCardOnBoard.get(index);
+    private void beginGame(int numCardsOnBoard){
+        mButtonQuit.setText(R.string.quit);
+        updateAndDeclareScores(true);
+        game.setStartTime();
+        for(int i = numCardsOnBoard; i < MAX_IMAGES; i++)
+            mImageArray[i].setVisibility(View.GONE);
+        for(int imageIndex = 0; imageIndex < numCardsOnBoard; imageIndex++){
+            mImageArray[imageIndex].setImageResource(game.dealTopCard(-1).getImageID());
+        }
+        if(!game.playIsPossible()) gameOver();
+        updateCardsRemaining();
     }
-
-    protected int getNumOfCardsSelected(){
-        return mSelectedCards.size();
-    }
-
-    protected int getNumOfCardsInDeck(){
-        return deck.getNumCardsInDeck();
-    }
-
-    protected int getSelectedCardIndex(int index){
-        return mSelectedCards.get(index);
-    }
-
-    protected int getTriplesRemaining(){
-        return mTriplesRemaining;
-    }
-
-    protected void setStartTime(){
-        mStartTime = System.currentTimeMillis();
-    }
-
-    protected void setTriplesRemaining(){
-        mTriplesRemaining--;
-    }
-
 
     /*************************************************
-     * Concrete Methods
+     * Begin Round listens for user card selection
      *************************************************/
-    protected Card dealTopCard(int index){
-        Card topCard = deck.getTopCard();
-        if(index == -1) {                       // -1 means opening deal
-            mCardOnBoard.add(topCard);
-        }
-        else {
-            mCardOnBoard.set(index,topCard);
-        }
-        return topCard;
-    }
-
-    protected void listSelectedCards(boolean isSelected, int cardIndex){
-        if(isSelected) mSelectedCards.add(cardIndex);
-        else {
-            for(int i = 0; i < mSelectedCards.size(); i++){
-                int list = mSelectedCards.get(i);
-                if(mSelectedCards.get(i) == cardIndex) mSelectedCards.remove(i);
-        }}
-    }
-
-    protected void removeSelectedCard(int index){
-        mSelectedCards.remove(index);
-    }
-
-    protected boolean isTriple(int firstCard, int secondCard, int thirdCard){
-        boolean isTriple = false;
-        if(mCardOnBoard.get(firstCard).getNumber() > 0
-                && mCardOnBoard.get(secondCard).getNumber() > 0
-                && mCardOnBoard.get(thirdCard).getNumber() > 0)
-        {
-            int num = mCardOnBoard.get(firstCard).getNumber() +
-                    mCardOnBoard.get(secondCard).getNumber() +
-                    mCardOnBoard.get(thirdCard).getNumber();
-            int alpha = mCardOnBoard.get(firstCard).getAlpha() +
-                    mCardOnBoard.get(secondCard).getAlpha() +
-                    mCardOnBoard.get(thirdCard).getAlpha();
-            int shape = mCardOnBoard.get(firstCard).getShape().ordinal() +
-                    mCardOnBoard.get(secondCard).getShape().ordinal() +
-                    mCardOnBoard.get(thirdCard).getShape().ordinal();
-            int color = mCardOnBoard.get(firstCard).getColor().ordinal() +
-                    mCardOnBoard.get(secondCard).getColor().ordinal() +
-                    mCardOnBoard.get(thirdCard).getColor().ordinal();
-            if(num % 3 == 0 && alpha % 3 == 0 && shape % 3 == 0 && color % 3 == 0) {
-                isTriple = true;
-            }
-        }
-        return isTriple;
-    }
-
-    protected boolean playIsPossible(){
-        boolean isPossible = false;
-        int firstCard = 0;
-        int secondCard = 1;
-        int thirdCard = 1;
-        boolean allCardsChecked = false;
-        while(!(isPossible || allCardsChecked)) {
-            if (thirdCard < mCardOnBoard.size() - 1) thirdCard++;
-            else {
-                if (secondCard < mCardOnBoard.size() - 2) {
-                    secondCard++;
-                    thirdCard = secondCard + 1;
-                } else {
-                    if (firstCard < mCardOnBoard.size() - 3) {
-                        firstCard++;
-                        secondCard = firstCard + 1;
-                        thirdCard = secondCard + 1;
+    protected void beginRound(int numCardsOnBoard) {
+        for (int imageIndex = 0; imageIndex < numCardsOnBoard; imageIndex++) {
+            final int index = imageIndex;
+            mImageArray[imageIndex].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Card cardSelected = game.getCardOnBoard(index);
+        // Card already selected, so this unselects it ******************
+                    if (cardSelected.getIsSelected()) {
+                        mImageArray[index].setImageResource(cardSelected.getImageID());
+                        cardSelected.setIsSelected(false);
+                        game.listSelectedCards(false, index);
+        // Card being selected  *******************************************
+                    } else {
+                        mImageArray[index].setImageResource(cardSelected.getSelectedImageID());
+                        cardSelected.setIsSelected(true);
+                        game.listSelectedCards(true, index);
                     }
+        // Checks to see if 3 cards have been selected **************************
+                    if (game.getNumOfCardsSelected() == 3)
+                        endRound();
                 }
+            });
+        mButtonQuit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), MainActivity.class);
+                startActivity(intent);
             }
-            isPossible = isTriple(firstCard, secondCard, thirdCard);
-            if(firstCard + secondCard + thirdCard == 3 * mCardOnBoard.size() - 6)   allCardsChecked = true;
+        });
         }
-        return isPossible;
     }
 
-    protected int updateScore() {
-        long time = System.currentTimeMillis() - mStartTime;
-        long scoreThisRound = 1000 - time / (10 * mLevel);
-        if(scoreThisRound < 100) mScore += 100;
-        else mScore += (int) scoreThisRound;
-        return mScore;
+    /*************************************************
+     * If triple, begins next round
+     *************************************************/
+    private void endRound(){
+        int index;
+        if (game.isTriple(game.getSelectedCardIndex(0), game.getSelectedCardIndex(1),
+                          game.getSelectedCardIndex(2))) {
+            for(int i = 3; i > 0; i--){
+                index = game.getSelectedCardIndex(i - 1);
+                if(game.getNumOfCardsInDeck() == 0) mImageArray[index].setVisibility(View.GONE);
+                game.dealTopCard(index);
+            }
+            for(int i = 3; i > 0; i--){
+                index = game.getSelectedCardIndex(i - 1);
+                mImageArray[index].startAnimation(slideDown);
+            }
+            game.setTriplesRemaining();
+            updateCardsRemaining();
+            updateAndDeclareScores(false);
+        }
+        else {
+            for(int i = 3; i > 0; i--){
+                index = game.getSelectedCardIndex(i - 1);
+                mImageArray[index].startAnimation(wobble);
+                mImageArray[index].setImageResource(game.getCardOnBoard(index).getImageID());
+                game.removeSelectedCard(i - 1);
+            }
+        }
+    }
+
+    /*************************************************
+     * Misc Concrete Methods
+     *************************************************/
+
+    protected void updateAndDeclareScores(boolean isBegin) {
+        SharedPreferences prefs = getSharedPreferences("Triples", MODE_PRIVATE);
+        SharedPreferences.Editor editor;editor = prefs.edit();
+        int highScore = prefs.getInt("High Score", 0);
+        int currentScore = 0;
+        if(!isBegin) currentScore = game.updateScore();
+        String score = "Score: " + currentScore;
+        mTextScore.setText(score);
+        String highScoreStr = "Current High Score: " + highScore;
+        if (currentScore > highScore) {
+            editor.putInt("High Score", currentScore);
+            editor.apply();
+            highScoreStr = "Current High Score: " + currentScore;
+        }
+        mTextHighScore.setText(highScoreStr);
+    }
+
+    protected void updateCardsRemaining(){
+        String cardsRemaining = "Cards in Deck: " + game.getNumOfCardsInDeck();
+        mTextCardsRemaining.setText(cardsRemaining);
+    }
+
+    private void setImageArray(){
+        mImageArray[0] = findViewById(R.id.imageView_0_0);
+        mImageArray[1] = findViewById(R.id.imageView_0_1);
+        mImageArray[2] = findViewById(R.id.imageView_0_2);
+        mImageArray[3] = findViewById(R.id.imageView_1_0);
+        mImageArray[4] = findViewById(R.id.imageView_1_1);
+        mImageArray[5] = findViewById(R.id.imageView_1_2);
+        mImageArray[6] = findViewById(R.id.imageView_2_0);
+        mImageArray[7] = findViewById(R.id.imageView_2_1);
+        mImageArray[8] = findViewById(R.id.imageView_2_2);
+        mImageArray[9] = findViewById(R.id.imageView_3_0);
+        mImageArray[10] = findViewById(R.id.imageView_3_1);
+        mImageArray[11] = findViewById(R.id.imageView_3_2);
+        mImageArray[12] = findViewById(R.id.imageView_4_0);
+        mImageArray[13] = findViewById(R.id.imageView_4_1);
+        mImageArray[14] = findViewById(R.id.imageView_4_2);
+        mImageArray[15] = findViewById(R.id.imageView_5_0);
+        mImageArray[16] = findViewById(R.id.imageView_5_1);
+        mImageArray[17] = findViewById(R.id.imageView_5_2);
+    }
+
+    private void setAnimationsAndListener(){
+        wobble = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.wobble);
+        slideDown = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.slide_down);
+        slideDown.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation anim)
+            {
+            }
+            public void onAnimationRepeat(Animation anim)
+            {
+            }
+            public void onAnimationEnd(Animation anim)
+            {
+                int index;
+                for(int i = 3; i > 0; i--){
+                    index = game.getSelectedCardIndex(i - 1);
+                    mImageArray[index].setImageResource(game.getCardOnBoard(index).getImageID());
+                    game.removeSelectedCard(i - 1);
+                    game.setStartTime();
+                }
+                if(!game.playIsPossible()) gameOver();
+            }
+        });
+    }
+
+    private void gameOver(){
+        String message = game.getGameOverMessage(getApplicationContext());
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+
     }
 }

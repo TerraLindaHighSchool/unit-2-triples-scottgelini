@@ -25,16 +25,18 @@ public class MainActivity extends AppCompatActivity {
         begin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showToast();
-                Intent intent = new Intent(v.getContext(), UIController.class);
-                intent.putExtra("Level",mLevel);
-                startActivity(intent);
+                if(mLevel >= 1 && mLevel <= 5) {
+                    showToast();
+                    Intent intent = new Intent(v.getContext(), GameActivity.class);
+                    intent.putExtra("Level", mLevel);
+                    startActivity(intent);
+                }
             }
         });
     }
 
     protected void radioButtonClick(View view){
-        RadioGroup rg = (RadioGroup) findViewById(R.id.radioGroup);
+        RadioGroup rg = findViewById(R.id.radioGroup);
         int radioButtonID = rg.getCheckedRadioButtonId();
         RadioButton radioButton = findViewById(radioButtonID);
         mSelectedButton = (String) radioButton.getText();
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showToast(){
-        String toast = "Beginning " + mSelectedButton + " Level";
+        String toast = "Starting " + mSelectedButton + " Level";
         Toast.makeText(this, toast, Toast.LENGTH_LONG).show();
     }
 }

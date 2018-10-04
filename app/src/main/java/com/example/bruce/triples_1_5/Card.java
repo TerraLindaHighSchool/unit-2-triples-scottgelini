@@ -1,14 +1,14 @@
 package com.example.bruce.triples_1_5;
 
 public class Card {
-    protected enum Shape{mTriangle, mSquare, mCircle, mNoShape};
-    protected enum Color{mRed, mGreen, mBlue, mNoColor};
+    protected enum Shape{Triangle, Square, Circle, NoShape}
+    protected enum Color{Red, Green, Blue, NoColor}
     private Shape mShape;
     private Color mColor;
     private int mNumber, mAlpha, mImageID, mSelectedImageID;
     private boolean mIsSelected;
 
-    protected Card(Shape shape, Color color, int number, int alpha, int imageID, int selectedImageID, boolean isSelected){
+    Card(Shape shape, Color color, int number, int alpha, int imageID, int selectedImageID, boolean isSelected){
         mNumber = number;
         mAlpha = alpha;
         mShape = shape;
