@@ -6,7 +6,7 @@ private int mselectedImage;
 private int mNum;
 private Shape mShape;
 private Color mColor;
-private int mImageId, mSelectedImageId;
+private int mImageID, mSelectedImageId;
 private boolean mIsSelected;
 private int mAlpha;
     public enum Shape {
@@ -24,8 +24,8 @@ private int mAlpha;
         return mColor;
     }
 
-        public int getImageId(){
-        return mImageId;
+        public int getImageID(){
+        return mImageID;
         }
 
     public int getAlpha(){
@@ -36,11 +36,11 @@ public Card (Shape shape, Color color, int alpha, int num, int image, int select
         mColor = color;
         mAlpha = alpha;
         mNum = num;
-        mImageId = image;
+        mImageID = image;
         mSelectedImageId = selectedimage;
 
 }
-    public int getSelectedImageId(){
+    public int getSelectedImageID(){
         return mSelectedImageId;
     }
 public void setIsSelected(boolean isSelected){
