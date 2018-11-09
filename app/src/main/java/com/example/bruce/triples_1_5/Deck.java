@@ -7,11 +7,10 @@ import java.util.Random;
     public class Deck {
         private Card[] mOrderedDeck;
         private ArrayList<Card> mShuffledDeck;
-        private Card mTopCard;
-        private int mNumCardsInDeck;
-        private Card mCard;
+
         Deck(int numOfCardsInDeck){
             mOrderedDeck = new Card[numOfCardsInDeck + 1];
+            mShuffledDeck = new ArrayList<>();
             populateOrderedDeckWithCards(numOfCardsInDeck);
             createShuffledDeck();
         }
@@ -204,7 +203,7 @@ import java.util.Random;
         }
         public int getNumCardsInDeck(){
 
-        return mNumCardsInDeck;
+            return mShuffledDeck.size();
 
         }
         public Card getTopCard(){
@@ -216,7 +215,7 @@ import java.util.Random;
 
         }
         public Card getCard(int index){
-            return mCard;
+            return mShuffledDeck.get(index);
         }
     }
 
