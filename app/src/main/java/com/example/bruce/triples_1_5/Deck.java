@@ -208,9 +208,10 @@ import java.util.Random;
         }
         public Card getTopCard(){
 
-            if (mShuffledDeck.size() > 0)
-            return mShuffledDeck.remove (0);
-            return mOrderedDeck[0];
+                if (mShuffledDeck.size() > 0)
+                return mShuffledDeck.remove (0);
+            else
+                return mOrderedDeck[0];
 
 
         }

@@ -14,6 +14,10 @@ public class GameModel {
         deck = new Deck(numOfCardsInDeck);
         mLevel = level;
         mNumOfCardsInDeck = numOfCardsInDeck;
+        mCardOnBoard = new ArrayList<>();
+        mSelectedCards = new ArrayList<>();
+        mStartTime = System.currentTimeMillis();
+        mScore = updateScore();
     }
 
 /*************************************************
@@ -54,7 +58,7 @@ public class GameModel {
      * Methods that place cards to board
      *************************************************/
     protected void addCardToBoard(){
-        mCardOnBoard.add(0, deck.getTopCard());
+        mCardOnBoard.add( deck.getTopCard());
     }
 
     protected void replaceCardOnBoard(int index){
